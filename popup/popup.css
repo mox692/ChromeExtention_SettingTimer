@@ -1,0 +1,15 @@
+#memo{
+    width: 400px;
+    height: 300px;
+    font-size: 16px;
+    background-color: #ffffc4;
+    border: 0;
+  }
+  
+  /*ボタンを押したとき*/
+  input:active {
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
+    border-bottom: none;
+  }

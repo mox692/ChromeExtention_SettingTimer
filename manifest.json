@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "ChromeMemo",
+    "version": "1.0.0",
+    "description": "アイコンクリックで、メモを起動します。URLボタンでURL,コピーボタンで選択範囲をメモに入れ込みます。メモを保存するときはSAVEをクリックしてください。",
+    "permissions": ["tabs","storage"],
+    "background": {
+        "scripts": ["background/background.js"],
+        "persistent": false
+      },
+    "browser_action": {
+      "default_title": "ChromeMemo",
+      "default_popup": "popup/popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content/contents.js"],
+        "css": ["content/content_scripts.css"]
+      }
+    ]
+  }
