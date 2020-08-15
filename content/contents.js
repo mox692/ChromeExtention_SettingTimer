@@ -8,9 +8,10 @@
     };
     chrome.runtime.sendMessage(sendData, function(response) {
       if (response){
-          console.log(response.response);
-          if(response.response){
+          console.log(response);
+          if(response.TimerStatus){
             // DISPLAY TIMER...
+            console.log(response.NowTime)
             createElement();
           }
       }
@@ -31,7 +32,7 @@
     setTimer(Number(request.message) * 60000);
 
     // backendにタイマーオンフラグを立てる。
-    changeTimerStatus(true);
+    changeTimerStatus(true, Number(request.message) * 60000);
 
     // 画面で選択されている部分を文字列で取得する
     if(window.getSelection){
@@ -111,10 +112,11 @@
     showtime(time);
   }
 
-  function changeTimerStatus(flag = false) {
+  function changeTimerStatus(flag = false, time) {
     sendData = {
       messageType: 'chengeTimerStatus',
-      onTimer: flag
+      onTimer: flag,
+      time: time
     }
     chrome.runtime.sendMessage(sendData, function(response) {
       if (response){
