@@ -8,7 +8,11 @@
     };
     chrome.runtime.sendMessage(sendData, function(response) {
       if (response){
-          console.log(response);
+          console.log(response.response);
+          if(response.response){
+            // DISPLAY TIMER...
+            createElement();
+          }
       }
       else{
           console.log('onTimerFlag => err...')
@@ -19,15 +23,14 @@
 
 
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-    let selection;
-    console.log(request.message); // -> 選択範囲ちょうだい が出力される
 
     // エレメントの作成
     createElement();
 
     // 1s毎にtimerを設置
-    setTimer(Number(request.message) * 1000);
+    setTimer(Number(request.message) * 60000);
 
+    // backendにタイマーオンフラグを立てる。
     changeTimerStatus(true);
 
     // 画面で選択されている部分を文字列で取得する
@@ -40,21 +43,42 @@
   });
 
 
+
   // 画面内のdivを取得 => そこにh3コンテントを作成
   function createElement() {
+
+    // create Time display zone 
     let target = document.querySelector('div');
-    let element = document.createElement('h3');
+    let element = document.createElement('div');
     element.textContent = "hi";
     element.id = "hidden_id"; 
+    element.className = "displayFix"; 
 
     myStyle = {
       fontSize: "3rem",
-      color: "red"
+      color: "red",
     }
     for(var prop in myStyle) {
       element.style[prop] = myStyle[prop];
     } 
     target.appendChild(element);
+    
+    // create stop button 
+    let stopButton = document.createElement('button');
+    stopButton.type = 'button';
+    stopButton.className = 'btn btn-warning displayFix stop-button';
+    stopButton.textContent = 'Stop';
+    stopButton.id = "stop_button_id"; 
+    target.appendChild(stopButton);
+
+    // create restart button 
+    let restartButton = document.createElement('button');
+    restartButton.type = 'button';
+    restartButton.className = 'btn btn-primary displayFix restart-button';
+    restartButton.textContent = 'Restart';
+    restartButton.id = "restart_button_id"; 
+    target.appendChild(restartButton);
+
   }
 
   // 1s毎に発火
@@ -69,8 +93,18 @@
         changeTimerStatus();
       }
       else{
-        disptime = time / 1000;
-        target.textContent = disptime;
+        second = time / 1000;
+
+        if(60 <= second){
+          disp_min = Math.floor(second / 60);
+          disp_sec = second % 60;
+        }
+        else{
+          disp_min = 0;
+          disp_sec = second;
+        }
+        target.textContent = `${disp_min}min ${disp_sec}sec`;
+        
         setTimeout(showtime, 1000);
       }
     }

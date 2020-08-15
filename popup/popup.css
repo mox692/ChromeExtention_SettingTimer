@@ -5,6 +5,18 @@
     background-color: #ffffc4;
     border: 0;
   }
+  .wrapper{
+    width: 400px;
+    height: 450px;
+    padding: 7%;
+  }
+  .time-select-area{
+    display: inline;
+  }
+  .time-select-area input{
+    display: inline;
+    width: 50px;
+  }
   
   /*ボタンを押したとき*/
   input:active {

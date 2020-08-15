@@ -1,9 +1,22 @@
 #hidden_id{
-    position: fixed;
     top: 50px;
     z-index: 10000000000;   
     color: 'red';
-    height: '100px';
+    background-color: rgba(255, 255, 0, 0.3);
+    height: '150px';
     width: '100px';
+    font-size: 3rem;
     background-color: 'green';
+}
+
+
+.displayFix{
+    top: 130px;
+    position: fixed;
+    z-index: 10000000000;   
+    font-size: smaller;
+}
+
+.restart-button{
+    left: 120px;
 }

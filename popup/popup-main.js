@@ -17,7 +17,7 @@ function loadData(){
   });
 }
 
-//保存ボタンが押されたとき
+// 
 $('#save').on('click', function(){
   memo = {
     text: $('#memo').val(),
@@ -28,11 +28,12 @@ $('#save').on('click', function(){
   });
 });
 
+// click start button 
 $('#timer_start').on('click', function(){
-  setting_time = $('#time').val();
+  settingTime = $('#min').val();
 
   chrome.tabs.query( {active:true, currentWindow:true}, function(tabs){
-    chrome.tabs.sendMessage(tabs[0].id, {message: setting_time}, function(){
+    chrome.tabs.sendMessage(tabs[0].id, {message: settingTime}, function(){
       alert('timer start!!');
     });
   });  

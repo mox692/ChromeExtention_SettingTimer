@@ -15,8 +15,8 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["content/contents.js"],
-        "css": ["content/content_scripts.css"]
+        "js": ["lib/jquery.min.js", "content/contents.js"],
+        "css": ["lib/bootstrap.min.css", "content/content_scripts.css"]
       }
     ]
   }
