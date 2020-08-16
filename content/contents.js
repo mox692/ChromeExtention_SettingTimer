@@ -85,7 +85,6 @@
     stopButton.onclick = function() {
       stopTimer();
     }
-    
     stopButton.id = "stop_button_id"; 
     target.appendChild(stopButton);
 
@@ -99,6 +98,18 @@
       restartTimer();
     }
     target.appendChild(restartButton);
+
+
+    // create delete button 
+    let deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'btn btn-danger displayFix delete-button';
+    deleteButton.textContent = 'Delete';
+    deleteButton.id = "delete_button_id"; 
+    deleteButton.onclick = function(){
+      deleteTimer();
+    }
+    target.appendChild(deleteButton);
 
   }
 
@@ -208,6 +219,32 @@
 
     changeTimerStatus(true, Remaining_Time);
     getBackgroundTimeEverySeconds();
+  }
+
+
+  function deleteTimer() {
+
+    //backへの通信→それが成功したら、windowの削除
+    sendData = {
+      messageType: 'deleteTimer',
+    };
+    chrome.runtime.sendMessage(sendData, function(response) {
+      if (response){
+          is_Runnnig = false;
+          Remaining_Time = 0;
+          deleteElement();
+      }
+      else{
+          alert('Can Not stop timer')
+      }
+    });
+  }
+
+  function deleteElement() {
+    $('#hidden_id').remove();
+    $('#delete_button_id').remove();
+    $('#stop_button_id').remove();
+    $('#restart_button_id').remove();
   }
 
   function mmTime_To_Second(mmTime){

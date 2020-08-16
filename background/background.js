@@ -43,6 +43,12 @@
                 sendResponse({Stopped_Time: Stopped_Time});
                 break;
 
+            case 'deleteTimer':
+                is_Running_Backend = false;
+                is_Running_Content = false;
+                Kill_Signal = true; 
+                sendResponse({delete_message: 'delete success'});
+                break;
         }
     });
 

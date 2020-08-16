@@ -18,7 +18,7 @@
 }
 
 .restart-button{
-    left: 120px   !important;
+    left: 70px   !important;
     width: auto !important;
     height: auto !important;
 }
@@ -26,4 +26,8 @@
 .stop-button{
     width: auto !important;
     height: auto !important;
+}
+
+.delete-button{
+    left: 190px   !important;
 }
