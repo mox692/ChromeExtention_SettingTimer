@@ -1,30 +1,48 @@
 {
-    On_Timer = false;
+    is_Running_Content  = false;
+    is_Running_Backend  = false;
     Remaining_Time = 0;
+    Stopped_Time = 0;
+    Kill_Signal = false;
 
     // from content
     chrome.runtime.onMessage.addListener(function(getData, sender, sendResponse) {
         console.log(getData)
         switch (getData.messageType){
             case 'checkTimerStatus':
+                console.log(`checkTimerStatusにて${is_Running_Backend}`);
                 sendResponse({
-                    TimerStatus: On_Timer,
-                    NowTime: Remaining_Time
+                    TimerStatus: is_Running_Backend,
+                    NowTime: Remaining_Time,
+                    ContentRunning: is_Running_Content,
+                    Stopped_Time: Stopped_Time
                 });
                 //  ここに現在の時間のレスポンスを加える
             break;
 
             case 'chengeTimerStatus':
                 if(getData.onTimer){
-                    On_Timer = true;
+                    is_Running_Backend = true;
+                    is_Running_Content = true;
+                    Kill_Signal = false;
+                    console.log(`chengeTimerStatusにて${is_Running_Backend}`);
                     setBackgroundTimer(getData.time);
                     sendResponse({response: 'NOW TIMER ON'});
                 }
                 else{
-                    On_Timer = false;
+                    is_Running_Backend = false;
                     sendResponse({response: 'NOW TIMER OFF'});
                 }
             break;
+
+            case 'stopTimer':
+                is_Running_Content  = false;
+                Stopped_Time = getData.Stopped_Time;
+                console.log(Stopped_Time);
+                Kill_Signal = true; 
+                sendResponse({Stopped_Time: Stopped_Time});
+                break;
+
         }
     });
 
@@ -36,8 +54,9 @@
             time = time - 1000;
             console.log(time);
             Remaining_Time = time;
-            if(time == 0){
+            if(time == 0 || Kill_Signal == true){
                 clearTimeout(timeoutId);
+                is_Running_Backend = false;
             }
         }
         showtime(time);

@@ -33,7 +33,10 @@ $('#timer_start').on('click', function(){
   settingTime = $('#min').val();
 
   chrome.tabs.query( {active:true, currentWindow:true}, function(tabs){
-    chrome.tabs.sendMessage(tabs[0].id, {message: settingTime}, function(){
+    chrome.tabs.sendMessage(tabs[0].id, {
+      settingTime: settingTime,
+      onTimer: true
+    }, function(){
       alert('timer start!!');
     });
   });  
