@@ -17,25 +17,25 @@ function loadData(){
   });
 }
 
-// 
-$('#save').on('click', function(){
-  memo = {
-    text: $('#memo').val(),
-    lastUpdate: new Date()
-  };
-  chrome.storage.local.set({chromememo: memo}, function(){
-    alert('保存が完了しました');
-  });
-});
-
 // click start button 
 $('#timer_start').on('click', function(){
   settingTime = $('#min').val();
+  
+  // validation (0 ~ 999)
+  let validation = /^[1-9]$|^[1-9][0-9]$|^[1-9][0-9][0-9]$/;
+  if(validation.test(settingTime)){
+    chrome.tabs.query( {active:true, currentWindow:true}, function(tabs){
+      chrome.tabs.sendMessage(tabs[0].id, {
+        settingTime: settingTime,
+        onTimer: true
+      }, function(){
+        alert('timer start!!');
+      });
+    });  
+  }
+  else{
+    alert('Please enter number collectly...\n (permitted "0~999" min)');
+  }
 
-  chrome.tabs.query( {active:true, currentWindow:true}, function(tabs){
-    chrome.tabs.sendMessage(tabs[0].id, {message: settingTime}, function(){
-      alert('timer start!!');
-    });
-  });  
 
 });
