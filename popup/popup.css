@@ -1,14 +1,17 @@
-#memo{
-    width: 400px;
-    height: 300px;
-    font-size: 16px;
-    background-color: #ffffc4;
-    border: 0;
-  }
+
   .wrapper{
-    width: 400px;
-    height: 450px;
+    display: block;
+    width: 200px;
+    height: 150px;
     padding: 7%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .form-wrapper{
+    margin: 0 auto;
+    text-align: center;
+    padding-bottom: 50px;
   }
   .time-select-area{
     display: inline;
@@ -16,6 +19,11 @@
   .time-select-area input{
     display: inline;
     width: 50px;
+  }
+  #timer_start{
+    /* display: block; */
+    margin: 0 auto 0 auto;
+    text-align: center;
   }
   
   /*ボタンを押したとき*/

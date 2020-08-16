@@ -1,32 +1,29 @@
 
 {
-  is_Runnnig  = false;
+  is_Runnnig = false;
   Remaining_Time = 0;
 
-  // load時、タイマーが計測されているかの判定を,backendと通信する事で確認
-  // remaining_timeの更新
-  // Timer_runnningの更新
+  
   window.onload = function() {
     sendData = {
       messageType: 'checkTimerStatus'
     };
     chrome.runtime.sendMessage(sendData, function(response) {
       if (response){
-          console.log(response);
-          // 
+          
           is_Runnnig = response.ContentRunning;
           if(is_Runnnig)
             Remaining_Time = response.NowTime;
           else
             Remaining_Time = response.Stopped_Time;
-          // タイマーがbackで起動していたら、ウィンドウ表示
+
           if(response.TimerStatus){
             createElement();
             getBackgroundTimeEverySeconds();
           }
       }
       else{
-          console.log('onTimerFlag => err...')
+          alert('now, you can not use timer.')
       }
     });
   }
@@ -34,22 +31,11 @@
 
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
-    // timer start時の処理
     if(request.onTimer == true){
-
-      // エレメントの作成
       createElement();
-
-      // 1s毎にtimerを設置
-      // setTimer(Number(request.settingTime) * 60000);
-
-      // backendにタイマーオンフラグを立てる。
       changeTimerStatus(true, Number(request.settingTime) * 60000);
-
-      // 1s毎にbackgroundと通信
       getBackgroundTimeEverySeconds();
 
-      // 画面で選択されている部分を文字列で取得する
       if(window.getSelection){
         selection = window.getSelection().toString();
       }else{
@@ -57,16 +43,13 @@
       }
       sendResponse(selection);
     }
-    // stop timerの処理
     else if(request.onTimer == false){
-
     }
 
   });
 
 
 
-  // 画面内のdivを取得 => そこにh3コンテントを作成
   function createElement() {
 
     // create Time display zone 
@@ -80,9 +63,11 @@
     // create stop button 
     let stopButton = document.createElement('button');
     stopButton.type = 'button';
+    stopButton.disabled = false;
     stopButton.className = 'btn btn-warning displayFix stop-button';
     stopButton.textContent = 'Stop';
     stopButton.onclick = function() {
+      restartButton.disabled = false;
       stopTimer();
     }
     stopButton.id = "stop_button_id"; 
@@ -91,14 +76,15 @@
     // create restart button 
     let restartButton = document.createElement('button');
     restartButton.type = 'button';
+    restartButton.disabled = true;
     restartButton.className = 'btn btn-primary displayFix restart-button';
     restartButton.textContent = 'Restart';
     restartButton.id = "restart_button_id"; 
     restartButton.onclick = function(){
+      restartButton.disabled = true;
       restartTimer();
     }
     target.appendChild(restartButton);
-
 
     // create delete button 
     let deleteButton = document.createElement('button');
@@ -113,38 +99,8 @@
 
   }
 
-  // 1s毎に発火
-  // divのidを取得してそこのtext-contentを書き換える
-  function setTimer(time) {
-    target = document.getElementById('hidden_id');
-
-    function showtime () {
-      time = time - 1000;
-      if(time == 0){
-        target.textContent = 'Time Over!!!';
-        changeTimerStatus();
-      }
-      else{
-        second = time / 1000;
-
-        if(60 <= second){
-          disp_min = Math.floor(second / 60);
-          disp_sec = second % 60;
-        }
-        else{
-          disp_min = 0;
-          disp_sec = second;
-        }
-        target.textContent = `${disp_min}min ${disp_sec}sec`;
-        
-        setTimeout(showtime, 1000);
-      }
-    }
-    showtime(time);
-  }
 
   
-  // backgroundのtimer値を取得して、id: hidden_idにセット
   function getBackgroundTimeEverySeconds(){
     let target = document.getElementById('hidden_id')
     sendData = {
@@ -152,10 +108,8 @@
     };
     chrome.runtime.sendMessage(sendData, function(response) {
       if (response){
-          console.log(response);
           if(response.TimerStatus){
             // DISPLAY TIMER...
-            console.log(`response.NowTime = ${response.NowTime}`)
             is_Runnnig = response.ContentRunning
             target.textContent = `${response.NowTime}`;
             Remaining_Time = response.NowTime;
@@ -182,6 +136,8 @@
     });
   }
 
+
+
   function changeTimerStatus(flag = false, time) {
     sendData = {
       messageType: 'chengeTimerStatus',
@@ -197,6 +153,8 @@
       }
     });
   }
+
+
 
   function stopTimer() {
     is_Runnnig = false;
@@ -222,6 +180,7 @@
   }
 
 
+
   function deleteTimer() {
 
     //backへの通信→それが成功したら、windowの削除
@@ -240,12 +199,16 @@
     });
   }
 
+
+
   function deleteElement() {
     $('#hidden_id').remove();
     $('#delete_button_id').remove();
     $('#stop_button_id').remove();
     $('#restart_button_id').remove();
   }
+
+
 
   function mmTime_To_Second(mmTime){
     second = mmTime / 1000;

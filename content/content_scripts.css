@@ -8,21 +8,17 @@
     font-size: 3rem;
     background-color: 'green';
 }
-
-
 .displayFix{
     top: 130px  !important;
     position: fixed  !important;
     z-index: 2147483647;   
     font-size: smaller;
 }
-
 .restart-button{
     left: 70px   !important;
     width: auto !important;
     height: auto !important;
 }
-
 .stop-button{
     width: auto !important;
     height: auto !important;

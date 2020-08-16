@@ -1,16 +1,25 @@
 {
     "manifest_version": 2,
-    "name": "ChromeMemo",
+    "name": "SetTimer on Your Browser!",
     "version": "1.0.0",
-    "description": "アイコンクリックで、メモを起動します。URLボタンでURL,コピーボタンで選択範囲をメモに入れ込みます。メモを保存するときはSAVEをクリックしてください。",
-    "permissions": ["tabs","storage"],
+    "description": "This extention display the timer on your browser. By doing this, you can work more efficiently!!",
+    "icons": {
+      "16": "./images/16.png",
+      "32": "./images/32.png",
+      "64": "./images/64.png",
+      "128": "./images/128.png"
+    },
+    "permissions": ["tabs"],
     "background": {
         "scripts": ["background/background.js"],
         "persistent": false
       },
     "browser_action": {
-      "default_title": "ChromeMemo",
-      "default_popup": "popup/popup.html"
+      "default_title": "SetTimer on Your Browser!",
+      "default_popup": "popup/popup.html",
+      "default_icon": {
+        "16": "./images/16.png"
+      }
     },
     "content_scripts": [
       {
