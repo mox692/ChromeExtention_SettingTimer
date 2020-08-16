@@ -54,7 +54,7 @@
             time = time - 1000;
             console.log(time);
             Remaining_Time = time;
-            if(time == 0 || Kill_Signal == true){
+            if(time == -1000 || Kill_Signal == true){
                 clearTimeout(timeoutId);
                 is_Running_Backend = false;
             }

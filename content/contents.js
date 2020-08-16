@@ -70,7 +70,7 @@
   function createElement() {
 
     // create Time display zone 
-    let target = document.querySelector('div');
+    let target = document.querySelector('body');
     let element = document.createElement('div');
     element.id = "hidden_id"; 
     element.className = "displayFix"; 
@@ -149,11 +149,18 @@
             target.textContent = `${response.NowTime}`;
             Remaining_Time = response.NowTime;
             if(is_Runnnig){
-              target.textContent = `${response.NowTime}`;
-              setTimeout(getBackgroundTimeEverySeconds, 1000);
+              if(Remaining_Time == 0){
+                target.textContent = 'Time Over!!!';;
+              }
+              else{
+                // target.textContent = `${response.NowTime}`;
+                target.textContent = mmTime_To_Second(response.NowTime)
+                setTimeout(getBackgroundTimeEverySeconds, 1000);
+              }
             }
             else{
-              target.textContent = `${response.Stopped_Time}`;
+              // target.textContent = `${response.Stopped_Time}`;
+              target.textContent = mmTime_To_Second(response.Stopped_Time)
             }
               
           }
@@ -201,6 +208,20 @@
 
     changeTimerStatus(true, Remaining_Time);
     getBackgroundTimeEverySeconds();
+  }
+
+  function mmTime_To_Second(mmTime){
+    second = mmTime / 1000;
+
+        if(60 <= second){
+          disp_min = Math.floor(second / 60);
+          disp_sec = second % 60;
+        }
+        else{
+          disp_min = 0;
+          disp_sec = second;
+        }
+        return `${disp_min}min ${disp_sec}sec`;
   }
 
 }
