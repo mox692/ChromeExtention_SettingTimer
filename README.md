@@ -4,13 +4,14 @@
 </div>
 
 <h2 align="center">
-Let's concentrate more on working with google chrome! 🎉
+Manage your time more efficiently! 🎉
 </h2>
 
 
 # ABOUT
-You can set the Timer on  your screen by using this extention. 
-During timer is ON, the timer emerges **in all pages or tabs**.
+・A simple timer extention.  
+・When you start the timer, remaining time will be displayed on your browser until the timer expires.    
+・The timer runs every active tab. This mean that you can retaine the timer **even if reload or move to another tab.**  
 
 # Get started
 ### ・Download
