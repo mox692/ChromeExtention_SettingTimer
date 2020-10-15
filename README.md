@@ -46,3 +46,6 @@ The following specifications have been confirmed for this extension.
 
 ## Contanct
 If you notice something wrong, please send a issue.
+
+## License
+MIT
