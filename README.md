@@ -28,7 +28,7 @@ Choose `developer mode` (refer the image below.), then choose the directory you 
 
 
 ### `・Pin it on the browser`
-After setting chrome, you can pin the extention on the chrome-menu-tab like this.  
+After setting folder, you can pin the extention on the chrome-menu-tab like this.  
 
 <img width="500" alt="スクリーンショット 2020-10-14 22 06 14" src="https://user-images.githubusercontent.com/55653825/95996326-81fd0900-0e6d-11eb-8378-0e2af743d1bb.png">
 
