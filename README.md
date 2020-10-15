@@ -20,8 +20,8 @@ Access the [release page](https://github.com/mox692/ChromeExtention_SettingTimer
 $ git clone https://github.com/mox692/ChromeExtention_SettingTimer/
 ```
 ### ・Setting chrome
-Go to the extention page(`chrome://extensions/`) on your chrome browser. 
-Then, choose the directory we just have downloaded.(refer the image below.)  
+Go to the Google Chrome extention page(`chrome://extensions/`) on your browser.   
+Then, choose the directory you just have downloaded.(refer the image below.)  
 
 <img width="500" alt="スクリーンショット 2020-10-14 21 51 29" width=50% src="https://user-images.githubusercontent.com/55653825/95992436-e8335d00-0e68-11eb-9b3c-cbb513b5d0d5.png">
 
