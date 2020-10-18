@@ -16,6 +16,4 @@ $('#timer_start').on('click', function(){
   else{
     alert('Please enter number collectly...\n (permitted "0~999" min)');
   }
-
-
 });
