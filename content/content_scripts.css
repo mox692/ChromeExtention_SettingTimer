@@ -54,6 +54,7 @@
 }
 .stop-button{
     /* left: 10px   ; */
+    left: 1px;
     width: auto ;
     height: auto ;
     color: #212529;
