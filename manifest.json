@@ -25,7 +25,7 @@
       {
         "matches": ["<all_urls>"],
         "js": ["lib/jquery.min.js", "content/contents.js"],
-        "css": ["lib/bootstrap.min.css", "content/content_scripts.css"]
+        "css": ["content/content_scripts.css"]
       }
     ]
   }

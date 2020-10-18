@@ -7,7 +7,6 @@
     margin: 0 auto;
     text-align: center;
   }
-
   .form-wrapper{
     margin: 0 auto;
     text-align: center;
@@ -21,11 +20,9 @@
     width: 50px;
   }
   #timer_start{
-    /* display: block; */
     margin: 0 auto 0 auto;
     text-align: center;
   }
-  
   /*ボタンを押したとき*/
   input:active {
     -webkit-transform: translateY(4px);
