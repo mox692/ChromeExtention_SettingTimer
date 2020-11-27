@@ -7,8 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "build": "webpack --config webpack.dev.js",
-    "build-prod": "webpack --config webpack.prod.js",
+    "build": "webpack --config webpack.config.js",
     "lint": "prettier --check .",
     "fmt": "prettier --write ."
   },
