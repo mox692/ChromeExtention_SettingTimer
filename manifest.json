@@ -1,31 +1,31 @@
 {
-    "manifest_version": 2,
-    "name": "SetTimer on Your Browser!",
-    "version": "1.0.0",
-    "description": "This extention display the timer on your browser. By doing this, you can work more efficiently!!",
-    "icons": {
-      "16": "./images/16.png",
-      "32": "./images/32.png",
-      "64": "./images/64.png",
-      "128": "./images/128.png"
-    },
-    "permissions": ["tabs"],
-    "background": {
-        "scripts": ["background/background.js"],
-        "persistent": false
-      },
-    "browser_action": {
-      "default_title": "SetTimer on Your Browser!",
-      "default_popup": "popup/popup.html",
-      "default_icon": {
-        "16": "./images/16.png"
-      }
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["lib/jquery.min.js", "content/contents.js"],
-        "css": ["content/content_scripts.css"]
-      }
-    ]
-  }
+  "manifest_version": 2,
+  "name": "SetTimer on Your Browser!",
+  "version": "1.0.0",
+  "description": "This extention display the timer on your browser. By doing this, you can work more efficiently!!",
+  "icons": {
+    "16": "./images/16.png",
+    "32": "./images/32.png",
+    "64": "./images/64.png",
+    "128": "./images/128.png"
+  },
+  "permissions": ["tabs"],
+  "background": {
+    "scripts": ["background/background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_title": "SetTimer on Your Browser!",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "./images/16.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["lib/jquery.min.js", "content/contents.js"],
+      "css": ["content/content_scripts.css"]
+    }
+  ]
+}
