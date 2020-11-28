@@ -7,9 +7,9 @@
     "lib": "lib"
   },
   "scripts": {
-    "build-content": "webpack --config webpack.config.content.js",
+    "build-content": "webpack --config webpack.content.js",
     "build-background": "webpack --config webpack.background.js",
-    "build-popup": "webpack --config webpack.config.js",
+    "build-popup": "webpack --config webpack.popup.js",
     "lint": "prettier --check .",
     "fmt": "prettier --write ."
   },
