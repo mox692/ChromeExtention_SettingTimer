@@ -15,7 +15,7 @@ module.exports = {
 
   output: {
     filename: "bundle.background.js",
-    path: path.join(__dirname, "./extention/dist/background"),
+    path: path.join(__dirname, "./extension/dist/background"),
   },
 
   externals: {

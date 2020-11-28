@@ -15,7 +15,7 @@ module.exports = {
 
   output: {
     filename: "bundle.content.js",
-    path: path.join(__dirname, "./extention/dist/content"),
+    path: path.join(__dirname, "./extension/dist/content"),
   },
 
   externals: {
