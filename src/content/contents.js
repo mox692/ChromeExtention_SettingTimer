@@ -1,0 +1,190 @@
+{
+  is_Runnnig = false;
+  Remaining_Time = 0;
+
+  window.onload = function () {
+    sendData = {
+      messageType: "checkTimerStatus",
+    };
+    chrome.runtime.sendMessage(sendData, function (response) {
+      if (response) {
+        is_Runnnig = response.ContentRunning;
+        if (is_Runnnig) Remaining_Time = response.NowTime;
+        else Remaining_Time = response.Stopped_Time;
+        if (response.TimerStatus) {
+          createElement();
+          getBackgroundTimeEverySeconds();
+        }
+      } else {
+        alert("now, you can not use timer.");
+      }
+    });
+  };
+
+  chrome.runtime.onMessage.addListener(function (
+    request,
+    sender,
+    sendResponse
+  ) {
+    if (request.onTimer == true) {
+      createElement();
+      changeTimerStatus(true, Number(request.settingTime) * 60000);
+      getBackgroundTimeEverySeconds();
+
+      if (window.getSelection) {
+        selection = window.getSelection().toString();
+      } else {
+        selection = "";
+      }
+      sendResponse(selection);
+    } else if (request.onTimer == false) {
+    }
+  });
+
+  function createElement() {
+    // create Time display zone
+    let target = document.querySelector("body");
+    let element = document.createElement("div");
+    element.id = "hidden_id";
+    element.className = "displayFix";
+    target.appendChild(element);
+
+    // create stop button
+    let stopButton = document.createElement("button");
+    stopButton.type = "button";
+    stopButton.disabled = false;
+    stopButton.className = "displayFix stop-button fnjdsanfsksadf";
+    stopButton.textContent = "Stop";
+    stopButton.onclick = function () {
+      restartButton.disabled = false;
+      stopTimer();
+    };
+    stopButton.id = "stop_button_id";
+    target.appendChild(stopButton);
+
+    // create restart button
+    let restartButton = document.createElement("button");
+    restartButton.type = "button";
+    restartButton.disabled = true;
+    restartButton.className = "displayFix restart-button fnjdsanfsksadf";
+    restartButton.textContent = "Restart";
+    restartButton.id = "restart_button_id";
+    restartButton.onclick = function () {
+      restartButton.disabled = true;
+      restartTimer();
+    };
+    target.appendChild(restartButton);
+
+    // create delete button
+    let deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "displayFix delete-button fnjdsanfsksadf";
+    deleteButton.textContent = "Delete";
+    deleteButton.id = "delete_button_id";
+    deleteButton.onclick = function () {
+      deleteTimer();
+    };
+    target.appendChild(deleteButton);
+  }
+
+  function getBackgroundTimeEverySeconds() {
+    let target = document.getElementById("hidden_id");
+    sendData = {
+      messageType: "checkTimerStatus",
+    };
+    chrome.runtime.sendMessage(sendData, function (response) {
+      if (response) {
+        if (response.TimerStatus) {
+          // DISPLAY TIMER...
+          is_Runnnig = response.ContentRunning;
+          target.textContent = `${response.NowTime}`;
+          Remaining_Time = response.NowTime;
+          if (is_Runnnig) {
+            if (Remaining_Time == 0) {
+              target.textContent = "Time Over!!!";
+            } else {
+              target.textContent = mmTime_To_Second(response.NowTime);
+              setTimeout(getBackgroundTimeEverySeconds, 1000);
+            }
+          } else {
+            target.textContent = mmTime_To_Second(response.Stopped_Time);
+          }
+        }
+      } else {
+        console.log("onTimerFlag => err...");
+      }
+    });
+  }
+
+  function changeTimerStatus(flag = false, time) {
+    sendData = {
+      messageType: "chengeTimerStatus",
+      onTimer: flag,
+      time: time,
+    };
+    chrome.runtime.sendMessage(sendData, function (response) {
+      if (response) {
+        console.log(response);
+      } else {
+        console.log("onTimerFlag => err...");
+      }
+    });
+  }
+
+  function stopTimer() {
+    is_Runnnig = false;
+    sendData = {
+      messageType: "stopTimer",
+      Stopped_Time: Remaining_Time,
+    };
+    chrome.runtime.sendMessage(sendData, function (response) {
+      if (response) {
+        console.log(response);
+      } else {
+        console.log("onTimerFlag => err...");
+      }
+    });
+  }
+
+  function restartTimer() {
+    is_Runnnig = true;
+
+    changeTimerStatus(true, Remaining_Time);
+    getBackgroundTimeEverySeconds();
+  }
+
+  function deleteTimer() {
+    //backへの通信→それが成功したら、windowの削除
+    sendData = {
+      messageType: "deleteTimer",
+    };
+    chrome.runtime.sendMessage(sendData, function (response) {
+      if (response) {
+        is_Runnnig = false;
+        Remaining_Time = 0;
+        deleteElement();
+      } else {
+        alert("Can Not stop timer");
+      }
+    });
+  }
+
+  function deleteElement() {
+    $("#hidden_id").remove();
+    $("#delete_button_id").remove();
+    $("#stop_button_id").remove();
+    $("#restart_button_id").remove();
+  }
+
+  function mmTime_To_Second(mmTime) {
+    second = mmTime / 1000;
+    if (60 <= second) {
+      disp_min = Math.floor(second / 60);
+      disp_sec = second % 60;
+    } else {
+      disp_min = 0;
+      disp_sec = second;
+    }
+    return `${disp_min}min ${disp_sec}sec`;
+  }
+}
