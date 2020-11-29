@@ -1,3 +1,5 @@
+
+
 namespace Contents {
   let is_Runnnig = false;
   let Remaining_Time = 0;
