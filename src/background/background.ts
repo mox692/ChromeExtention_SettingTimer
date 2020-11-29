@@ -58,7 +58,7 @@
 
   // in => time(mm sec) , out => change remainTime
   function setBackgroundTimer(time:number) {
-    function showtime(time:number) {
+    function showtime() {
       let timeoutId = setTimeout(showtime, 1000);
       time = time - 1000;
       console.log(time);
@@ -68,5 +68,5 @@
         is_Running_Backend = false;
       }
     }
-    showtime(time);
+    showtime();
   }

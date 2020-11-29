@@ -94,8 +94,73 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n// import './backgrounds'\nvar is_Running_Content = false;\nvar is_Running_Backend = false;\nvar Remaining_Time = 0;\nvar Stopped_Time = 0;\nvar Kill_Signal = false;\n// from content\nchrome.runtime.onMessage.addListener(function (getData, sender, sendResponse) {\n    console.log(getData);\n    switch (getData.messageType) {\n        case \"checkTimerStatus\":\n            console.log(\"checkTimerStatus\\u306B\\u3066\" + is_Running_Backend);\n            sendResponse({\n                TimerStatus: is_Running_Backend,\n                NowTime: Remaining_Time,\n                ContentRunning: is_Running_Content,\n                Stopped_Time: Stopped_Time,\n            });\n            //  ここに現在の時間のレスポンスを加える\n            break;\n        case \"chengeTimerStatus\":\n            if (getData.onTimer) {\n                is_Running_Backend = true;\n                is_Running_Content = true;\n                Kill_Signal = false;\n                console.log(\"chengeTimerStatus\\u306B\\u3066\" + is_Running_Backend);\n                setBackgroundTimer(getData.time);\n                sendResponse({ response: \"NOW TIMER ON\" });\n            }\n            else {\n                is_Running_Backend = false;\n                sendResponse({ response: \"NOW TIMER OFF\" });\n            }\n            break;\n        case \"stopTimer\":\n            is_Running_Content = false;\n            Stopped_Time = getData.Stopped_Time;\n            console.log(Stopped_Time);\n            Kill_Signal = true;\n            sendResponse({ Stopped_Time: Stopped_Time });\n            break;\n        case \"deleteTimer\":\n            is_Running_Backend = false;\n            is_Running_Content = false;\n            Kill_Signal = true;\n            sendResponse({ delete_message: \"delete success\" });\n            break;\n    }\n});\n// in => time(mm sec) , out => change remainTime\nfunction setBackgroundTimer(time) {\n    function showtime(time) {\n        var timeoutId = setTimeout(showtime, 1000);\n        time = time - 1000;\n        console.log(time);\n        Remaining_Time = time;\n        if (time == -1000 || Kill_Signal == true) {\n            clearTimeout(timeoutId);\n            is_Running_Backend = false;\n        }\n    }\n    showtime(time);\n}\n\n\n//# sourceURL=webpack:///./src/background/background.ts?");
+
+// import './backgrounds'
+var is_Running_Content = false;
+var is_Running_Backend = false;
+var Remaining_Time = 0;
+var Stopped_Time = 0;
+var Kill_Signal = false;
+// from content
+chrome.runtime.onMessage.addListener(function (getData, sender, sendResponse) {
+    console.log(getData);
+    switch (getData.messageType) {
+        case "checkTimerStatus":
+            console.log("checkTimerStatus\u306B\u3066" + is_Running_Backend);
+            sendResponse({
+                TimerStatus: is_Running_Backend,
+                NowTime: Remaining_Time,
+                ContentRunning: is_Running_Content,
+                Stopped_Time: Stopped_Time,
+            });
+            //  ここに現在の時間のレスポンスを加える
+            break;
+        case "chengeTimerStatus":
+            if (getData.onTimer) {
+                is_Running_Backend = true;
+                is_Running_Content = true;
+                Kill_Signal = false;
+                console.log("chengeTimerStatus\u306B\u3066" + is_Running_Backend);
+                setBackgroundTimer(getData.time);
+                sendResponse({ response: "NOW TIMER ON" });
+            }
+            else {
+                is_Running_Backend = false;
+                sendResponse({ response: "NOW TIMER OFF" });
+            }
+            break;
+        case "stopTimer":
+            is_Running_Content = false;
+            Stopped_Time = getData.Stopped_Time;
+            console.log(Stopped_Time);
+            Kill_Signal = true;
+            sendResponse({ Stopped_Time: Stopped_Time });
+            break;
+        case "deleteTimer":
+            is_Running_Backend = false;
+            is_Running_Content = false;
+            Kill_Signal = true;
+            sendResponse({ delete_message: "delete success" });
+            break;
+    }
+});
+// in => time(mm sec) , out => change remainTime
+function setBackgroundTimer(time) {
+    function showtime() {
+        var timeoutId = setTimeout(showtime, 1000);
+        time = time - 1000;
+        console.log(time);
+        Remaining_Time = time;
+        if (time == -1000 || Kill_Signal == true) {
+            clearTimeout(timeoutId);
+            is_Running_Backend = false;
+        }
+    }
+    showtime();
+}
+
 
 /***/ })
 
 /******/ });
+//# sourceMappingURL=bundle.background.js.map

@@ -12,6 +12,8 @@ module.exports = {
     },
     
   mode: "development",
+  
+  devtool: 'cheap-module-source-map',
 
   output: {
     filename: "bundle.background.js",

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "SetTimer on Your Browser!",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "This extention display the timer on your browser. By doing this, you can work more efficiently!!",
   "icons": {
     "16": "./images/16.png",
@@ -11,7 +11,7 @@
   },
   "permissions": ["tabs"],
   "background": {
-    "scripts": ["dist/background/background.js"],
+    "scripts": ["dist/background/bundle.background.js"],
     "persistent": false
   },
   "browser_action": {
