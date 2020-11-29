@@ -1,15 +1,14 @@
-declare module chrome{
+declare module chrome {
+  export class runtime {
+    static onMessage: onMessageType;
+    static sendMessage(sendData: any, callBack: (response: any) => void);
+  }
 
-    export class runtime {
-        static onMessage:onMessageType
-        static sendMessage(sendData:any, callBack: (response:any) => void)
-    }
+  export class onMessageType {
+    addListener(something: any);
+  }
 
-    export class onMessageType {
-        addListener(something:any)
-    }
-
-    export type Data = {
-        data:any
-    }
+  export type Data = {
+    data: any;
+  };
 }

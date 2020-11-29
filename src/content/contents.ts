@@ -22,9 +22,9 @@ namespace Contents {
   };
 
   chrome.runtime.onMessage.addListener(function (
-    request:any,
-    sender:any,
-    sendResponse:any
+    request: any,
+    sender: any,
+    sendResponse: any
   ) {
     if (request.onTimer == true) {
       createElement();
@@ -34,12 +34,11 @@ namespace Contents {
       let selection;
       if (window.getSelection) {
         // ************ todo: null check to `window.getSelection()` ****************
-        selection = window.getSelection()
-        if(selection === null){
-          return 
+        selection = window.getSelection();
+        if (selection === null) {
+          return;
         }
         selection = selection.toString();
-        
       } else {
         selection = "";
       }
@@ -49,10 +48,9 @@ namespace Contents {
   });
 
   function createElement() {
-
     let target = document.querySelector("body");
-    // ************ todo: null check to `target` **************** 
-    if (target === null ) {
+    // ************ todo: null check to `target` ****************
+    if (target === null) {
       target = document.createElement("body");
     }
 
@@ -100,9 +98,9 @@ namespace Contents {
   }
 
   function getBackgroundTimeEverySeconds() {
-    let target = document.getElementById("hidden_id") ?? document.createElement("body");
+    let target =
+      document.getElementById("hidden_id") ?? document.createElement("body");
 
-    
     let sendData = {
       messageType: "checkTimerStatus",
     };
@@ -130,7 +128,7 @@ namespace Contents {
     });
   }
 
-  function changeTimerStatus(flag = false, time:any) {
+  function changeTimerStatus(flag = false, time: any) {
     let sendData = {
       messageType: "chengeTimerStatus",
       onTimer: flag,
@@ -190,7 +188,7 @@ namespace Contents {
     $("#restart_button_id").remove();
   }
 
-  function mmTime_To_Second(mmTime:any) {
+  function mmTime_To_Second(mmTime: any) {
     let second = mmTime / 1000;
     let disp_min;
     let disp_sec;
@@ -203,5 +201,4 @@ namespace Contents {
     }
     return `${disp_min}min ${disp_sec}sec`;
   }
-
 }
