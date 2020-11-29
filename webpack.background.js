@@ -12,7 +12,7 @@ module.exports = {
     },
     
   mode: "development",
-  
+  // modeをprodにするか、devtoolのflagを変えないと、extensionではerrorが発生する
   devtool: 'cheap-module-source-map',
 
   output: {

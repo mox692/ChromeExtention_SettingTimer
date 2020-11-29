@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./src/content/index.ts",
+    entry: "./src/content/contents.ts",
   
     resolve: {
       extensions: [".ts", ".tsx", ".js", ".json"],
@@ -11,10 +11,12 @@ module.exports = {
      rules: [{ test: /\.ts?$/, loader: "awesome-typescript-loader" }],
     },
     
-  mode: "development",
+    mode: "development",
+    // modeをprodにするか、devtoolのflagを変えないと、extensionではerrorが発生する
+    devtool: 'cheap-module-source-map',
 
   output: {
-    filename: "bundle.content.js",
+    filename: "bundle.contents.js",
     path: path.join(__dirname, "./extension/dist/content"),
   },
 
