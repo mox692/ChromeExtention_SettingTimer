@@ -11,9 +11,9 @@ module.exports = {
       rules: [{ test: /\.ts?$/, loader: "awesome-typescript-loader" }],
     },
     
-  mode: "development",
+  mode: "production",
   // modeをprodにするか、devtoolのflagを変えないと、extensionではerrorが発生する
-  devtool: 'cheap-module-source-map',
+  // devtool: 'cheap-module-source-map',
 
   output: {
     filename: "bundle.background.js",
