@@ -1,4 +1,5 @@
-{
+// import './backgrounds'
+
   let is_Running_Content = false;
   let is_Running_Backend = false;
   let Remaining_Time = 0;
@@ -7,9 +8,9 @@
 
   // from content
   chrome.runtime.onMessage.addListener(function (
-    getData,
-    sender,
-    sendResponse
+    getData:any,
+    sender:any,
+    sendResponse:any
   ) {
     console.log(getData);
     switch (getData.messageType) {
@@ -56,8 +57,8 @@
   });
 
   // in => time(mm sec) , out => change remainTime
-  function setBackgroundTimer(time) {
-    function showtime() {
+  function setBackgroundTimer(time:number) {
+    function showtime(time:number) {
       let timeoutId = setTimeout(showtime, 1000);
       time = time - 1000;
       console.log(time);
@@ -69,4 +70,3 @@
     }
     showtime(time);
   }
-}

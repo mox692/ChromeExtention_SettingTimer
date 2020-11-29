@@ -81,20 +81,20 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/background/index.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/background/background.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/background/index.ts":
-/*!*********************************!*\
-  !*** ./src/background/index.ts ***!
-  \*********************************/
+/***/ "./src/background/background.ts":
+/*!**************************************!*\
+  !*** ./src/background/background.ts ***!
+  \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nvar Student = /** @class */ (function () {\n    function Student(name, age, schoolName) {\n        var _this = this;\n        this.sayName = function () {\n            return \"name is \" + _this.name;\n        };\n        this.name = name;\n        this.age = age;\n        this.schoolName = schoolName;\n    }\n    return Student;\n}());\nvar st1 = new Student(\"motoyuki\", 22, \"todai\");\nconsole.log(st1.sayName());\n\n\n//# sourceURL=webpack:///./src/background/index.ts?");
+eval("\n// import './backgrounds'\nvar is_Running_Content = false;\nvar is_Running_Backend = false;\nvar Remaining_Time = 0;\nvar Stopped_Time = 0;\nvar Kill_Signal = false;\n// from content\nchrome.runtime.onMessage.addListener(function (getData, sender, sendResponse) {\n    console.log(getData);\n    switch (getData.messageType) {\n        case \"checkTimerStatus\":\n            console.log(\"checkTimerStatus\\u306B\\u3066\" + is_Running_Backend);\n            sendResponse({\n                TimerStatus: is_Running_Backend,\n                NowTime: Remaining_Time,\n                ContentRunning: is_Running_Content,\n                Stopped_Time: Stopped_Time,\n            });\n            //  ここに現在の時間のレスポンスを加える\n            break;\n        case \"chengeTimerStatus\":\n            if (getData.onTimer) {\n                is_Running_Backend = true;\n                is_Running_Content = true;\n                Kill_Signal = false;\n                console.log(\"chengeTimerStatus\\u306B\\u3066\" + is_Running_Backend);\n                setBackgroundTimer(getData.time);\n                sendResponse({ response: \"NOW TIMER ON\" });\n            }\n            else {\n                is_Running_Backend = false;\n                sendResponse({ response: \"NOW TIMER OFF\" });\n            }\n            break;\n        case \"stopTimer\":\n            is_Running_Content = false;\n            Stopped_Time = getData.Stopped_Time;\n            console.log(Stopped_Time);\n            Kill_Signal = true;\n            sendResponse({ Stopped_Time: Stopped_Time });\n            break;\n        case \"deleteTimer\":\n            is_Running_Backend = false;\n            is_Running_Content = false;\n            Kill_Signal = true;\n            sendResponse({ delete_message: \"delete success\" });\n            break;\n    }\n});\n// in => time(mm sec) , out => change remainTime\nfunction setBackgroundTimer(time) {\n    function showtime(time) {\n        var timeoutId = setTimeout(showtime, 1000);\n        time = time - 1000;\n        console.log(time);\n        Remaining_Time = time;\n        if (time == -1000 || Kill_Signal == true) {\n            clearTimeout(timeoutId);\n            is_Running_Backend = false;\n        }\n    }\n    showtime(time);\n}\n\n\n//# sourceURL=webpack:///./src/background/background.ts?");
 
 /***/ })
 

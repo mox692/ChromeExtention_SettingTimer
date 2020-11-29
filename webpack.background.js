@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./src/background/index.ts",
+    entry: "./src/background/background.ts",
   
     resolve: {
       extensions: [".ts", ".tsx", ".js", ".json"],
