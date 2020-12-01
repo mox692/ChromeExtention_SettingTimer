@@ -8,18 +8,18 @@ let Stopped_Time = 0;
 let Kill_Signal = false;
 
 class TimerBackgroundStatus {
-  constructor(){
-    this.isRunnnigBacnend = false
-    this.isRunnnigContent = false
-    this.killSignal = false
-    this.remainigTime = 0
-    this.stoppedTime = 0
-  }
-  isRunnnigContent:boolean
-  isRunnnigBacnend:boolean
-  killSignal:boolean
-  remainigTime:number
-  stoppedTime:number
+  // constructor(){
+  //   this.is_Runnnig_Bacnend = false
+  //   this.is_Runnnig_Content = false
+  //   this.kill_Signal = false
+  //   this.remainig_Time = 0
+  //   this.stopped_Time = 0
+  // }
+  // is_Runnnig_Content:boolean
+  // is_Runnnig_Bacnend:boolean
+  // kill_Signal:boolean
+  // remainig_Time:number
+  // stopped_Time:number
 }
 
 let timerStatus = new TimerBackgroundStatus()
@@ -80,12 +80,9 @@ chrome.runtime.onMessage.addListener(function (
   }
 });
 
-const setBackgroundTimer = (time:number):void => {
-  showTime(time);
-}
-
-const showTime = (time :number):void => {
-  let timeoutId = setTimeout(showTime, 1000);
+function setBackgroundTimer(time: number) {
+  function showtime() {
+    let timeoutId = setTimeout(showtime, 1000);
     time = time - 1000;
     console.log(time);
     Remaining_Time = time;
@@ -93,4 +90,6 @@ const showTime = (time :number):void => {
       clearTimeout(timeoutId);
       is_Running_Backend = false;
     }
+  }
+  showtime();
 }
