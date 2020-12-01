@@ -8,12 +8,12 @@ let Stopped_Time = 0;
 let Kill_Signal = false;
 
 class TimerBackgroundStatus {
-  constructor(isRunningContent:boolean,isRunningBackend:boolean,killSignal:boolean,remainingTime:number,stoppedTime:number){
-    this.isRunnnigBacnend = isRunningBackend
-    this.isRunnnigContent = isRunningContent
-    this.killSignal = killSignal
-    this.remainigTime = remainingTime
-    this.stoppedTime = stoppedTime
+  constructor(){
+    this.isRunnnigBacnend = false
+    this.isRunnnigContent = false
+    this.killSignal = false
+    this.remainigTime = 0
+    this.stoppedTime = 0
   }
   isRunnnigContent:boolean
   isRunnnigBacnend:boolean
@@ -22,8 +22,7 @@ class TimerBackgroundStatus {
   stoppedTime:number
 }
 
-
-
+let timerStatus = new TimerBackgroundStatus()
 
 // from content
 chrome.runtime.onMessage.addListener(function (
