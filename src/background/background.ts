@@ -1,5 +1,5 @@
 
-import {responseData, responseFn, messageType} from '../types'
+import {responseData, responseFn, messageType, sendData} from '../types'
 
 let is_Running_Content = false;
 let is_Running_Backend = false;
@@ -22,9 +22,12 @@ class TimerBackgroundStatus {
   stoppedTime:number
 }
 
+
+
+
 // from content
 chrome.runtime.onMessage.addListener(function (
-  getData: any,
+  getData: sendData,
   sender: any,
   sendResponse: responseFn
 ) {
@@ -47,7 +50,10 @@ chrome.runtime.onMessage.addListener(function (
         is_Running_Content = true;
         Kill_Signal = false;
         console.log(`chengeTimerStatusにて${is_Running_Backend}`);
-        setBackgroundTimer(getData.time);
+        // ******** todo: handle if nil
+        if(getData.time != null){
+          setBackgroundTimer(getData.time);
+        }
         sendResponse({ response: "NOW TIMER ON" });
       } else {
         is_Running_Backend = false;
@@ -57,7 +63,10 @@ chrome.runtime.onMessage.addListener(function (
 
     case "stopTimer":
       is_Running_Content = false;
-      Stopped_Time = getData.Stopped_Time;
+       // ******** todo: handle if nil
+      if(getData.Stopped_Time != null) {
+        Stopped_Time = getData.Stopped_Time;
+      }
       console.log(Stopped_Time);
       Kill_Signal = true;
       sendResponse({ Stopped_Time: Stopped_Time });
@@ -72,10 +81,12 @@ chrome.runtime.onMessage.addListener(function (
   }
 });
 
-// in => time(mm sec) , out => change remainTime
-function setBackgroundTimer(time: number) {
-  function showtime() {
-    let timeoutId = setTimeout(showtime, 1000);
+const setBackgroundTimer = (time:number):void => {
+  showTime(time);
+}
+
+const showTime = (time :number):void => {
+  let timeoutId = setTimeout(showTime, 1000);
     time = time - 1000;
     console.log(time);
     Remaining_Time = time;
@@ -83,6 +94,4 @@ function setBackgroundTimer(time: number) {
       clearTimeout(timeoutId);
       is_Running_Backend = false;
     }
-  }
-  showtime();
 }
