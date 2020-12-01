@@ -2,7 +2,7 @@
 namespace Contents {
 
   type sendData = {
-    messageType :string
+    messageType :messageType
     onTimer?:boolean
     time?: number
     Stopped_Time?:number
@@ -16,6 +16,8 @@ namespace Contents {
     isRunnning:boolean
     remainingTime:number
   }
+
+  type messageType = 'checkTimerStatus' | 'chengeTimerStatus' | 'deleteTimer' | 'checkTimerStatus'
 
   let is_Runnnig = false;
   let Remaining_Time = 0;

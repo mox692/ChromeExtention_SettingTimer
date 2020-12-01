@@ -21,11 +21,24 @@ class TimerBackgroundStatus {
   stoppedTime:number
 }
 
+type responseData = {
+  TimerStatus?:boolean
+  NowTime?:number
+  ContentRunning?:boolean
+  Stopped_Time?:number
+  response?:string
+  delete_message? :string
+}
+
+type responseFn = {
+  (data: responseData):void
+}
+
 // from content
 chrome.runtime.onMessage.addListener(function (
   getData: any,
   sender: any,
-  sendResponse: any
+  sendResponse: responseFn
 ) {
   console.log(getData);
   switch (getData.messageType) {
