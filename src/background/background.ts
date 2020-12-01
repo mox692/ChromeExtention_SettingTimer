@@ -1,4 +1,5 @@
 
+import {responseData, responseFn, messageType} from '../types'
 
 let is_Running_Content = false;
 let is_Running_Backend = false;
@@ -19,19 +20,6 @@ class TimerBackgroundStatus {
   killSignal:boolean
   remainigTime:number
   stoppedTime:number
-}
-
-type responseData = {
-  TimerStatus?:boolean
-  NowTime?:number
-  ContentRunning?:boolean
-  Stopped_Time?:number
-  response?:string
-  delete_message? :string
-}
-
-type responseFn = {
-  (data: responseData):void
 }
 
 // from content
