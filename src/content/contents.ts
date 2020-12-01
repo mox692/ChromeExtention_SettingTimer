@@ -1,8 +1,25 @@
 
-
 namespace Contents {
+
+  type sendData = {
+    messageType :string
+    onTimer?:boolean
+    time?: number
+    Stopped_Time?:number
+  }
+
+  class ContentStatus {
+    constructor(isRunning:boolean, remainingTime:number){
+      this.isRunnning = isRunning
+      this.remainingTime = remainingTime
+    }
+    isRunnning:boolean
+    remainingTime:number
+  }
+
   let is_Runnnig = false;
   let Remaining_Time = 0;
+
 
   window.onload = function () {
     let sendData = {
