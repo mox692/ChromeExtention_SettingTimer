@@ -19,6 +19,15 @@ namespace Contents {
 
   type messageType = 'checkTimerStatus' | 'chengeTimerStatus' | 'deleteTimer' | 'checkTimerStatus'
 
+  class TimerContentsStatus {
+    constructor(){
+      this.is_Running = false,
+      this.remaining_time = 0
+    }
+    is_Running:boolean
+    remaining_time:number
+  }
+
   let is_Runnnig = false;
   let Remaining_Time = 0;
 
