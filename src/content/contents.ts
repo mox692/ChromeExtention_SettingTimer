@@ -30,15 +30,19 @@ namespace Contents {
 
   let contentStatus = new TimerContentsStatus
 
-  window.onload = function () {
-    let sendData = {
+  window.onload = () => {
+    let sendData:sendData = {
       messageType: "checkTimerStatus",
     };
-    chrome.runtime.sendMessage(sendData, function (response) {
+    chrome.runtime.sendMessage(sendData,  (response) => {
       if (response) {
         contentStatus.is_Running = response.ContentRunning;
-        if (contentStatus.is_Running) contentStatus.remaining_time = response.NowTime;
-        else contentStatus.remaining_time = response.Stopped_Time;
+        if (contentStatus.is_Running){
+          contentStatus.remaining_time = response.NowTime;
+        }
+        else{
+          contentStatus.remaining_time = response.Stopped_Time;
+        }
         if (response.TimerStatus) {
           createElement();
           getBackgroundTimeEverySeconds();
