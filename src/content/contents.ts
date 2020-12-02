@@ -17,7 +17,7 @@ namespace Contents {
     remainingTime:number
   }
 
-  type messageType = 'checkTimerStatus' | 'chengeTimerStatus' | 'deleteTimer' | 'checkTimerStatus'
+  type messageType = 'checkTimerStatus' | 'chengeTimerStatus' | 'deleteTimer' | 'checkTimerStatus' | 'stopTimer'
 
   class TimerContentsStatus {
     constructor(){
@@ -63,36 +63,33 @@ namespace Contents {
       changeTimerStatus(true, Number(request.settingTime) * 60000);
       getBackgroundTimeEverySeconds();
 
-      let selection;
-      if (window.getSelection) {
+      let selection = window.getSelection();
+      if (selection != null) {
         // ************ todo: null check to `window.getSelection()` ****************
-        selection = window.getSelection();
-        if (selection === null) {
-          return;
-        }
-        selection = selection.toString();
-      } else {
-        selection = "";
+        // for debug
+        sendResponse(selection.toString);
+      } 
+      else {
+        alert("element が作成できません")
+        return
       }
-      sendResponse(selection);
-    } else if (request.onTimer == false) {
-    }
+    } 
   });
 
-  function createElement() {
-    let target = document.querySelector("body");
+  function createElement():void {
+    let target:HTMLElementTagNameMap["body"] | null = document.querySelector("body");
     // ************ todo: null check to `target` ****************
     if (target === null) {
       target = document.createElement("body");
     }
 
-    let element = document.createElement("div");
+    let element:HTMLElementTagNameMap["div"] = document.createElement("div");
     element.id = "hidden_id";
     element.className = "displayFix";
     target.appendChild(element);
 
     // create stop button
-    let stopButton = document.createElement("button");
+    let stopButton:HTMLElementTagNameMap["button"] = document.createElement("button");
     stopButton.type = "button";
     stopButton.disabled = false;
     stopButton.className = "displayFix stop-button fnjdsanfsksadf";
@@ -105,7 +102,7 @@ namespace Contents {
     target.appendChild(stopButton);
 
     // create restart button
-    let restartButton = document.createElement("button");
+    let restartButton:HTMLElementTagNameMap["button"] = document.createElement("button");
     restartButton.type = "button";
     restartButton.disabled = true;
     restartButton.className = "displayFix restart-button fnjdsanfsksadf";
@@ -118,7 +115,7 @@ namespace Contents {
     target.appendChild(restartButton);
 
     // create delete button
-    let deleteButton = document.createElement("button");
+    let deleteButton:HTMLElementTagNameMap["button"] = document.createElement("button");
     deleteButton.type = "button";
     deleteButton.className = "displayFix delete-button fnjdsanfsksadf";
     deleteButton.textContent = "Delete";
@@ -129,14 +126,14 @@ namespace Contents {
     target.appendChild(deleteButton);
   }
 
-  function getBackgroundTimeEverySeconds() {
-    let target =
+  function getBackgroundTimeEverySeconds():void {
+    let target: HTMLElement =
       document.getElementById("hidden_id") ?? document.createElement("body");
 
-    let sendData = {
+    let sendData:sendData = {
       messageType: "checkTimerStatus",
     };
-    chrome.runtime.sendMessage(sendData, function (response) {
+    chrome.runtime.sendMessage(sendData,  (response) =>  {
       if (response) {
         if (response.TimerStatus) {
           // DISPLAY TIMER...
@@ -160,8 +157,8 @@ namespace Contents {
     });
   }
 
-  function changeTimerStatus(flag = false, time: any) {
-    let sendData = {
+  function changeTimerStatus(flag = false, time: number):void {
+    let sendData:sendData = {
       messageType: "chengeTimerStatus",
       onTimer: flag,
       time: time,
@@ -175,13 +172,13 @@ namespace Contents {
     });
   }
 
-  function stopTimer() {
+  function stopTimer():void {
     contentStatus.is_Running = false;
-    let sendData = {
+    let sendData:sendData = {
       messageType: "stopTimer",
       Stopped_Time: contentStatus.remaining_time,
     };
-    chrome.runtime.sendMessage(sendData, function (response) {
+    chrome.runtime.sendMessage(sendData, (response) => {
       if (response) {
         console.log(response);
       } else {
@@ -197,12 +194,12 @@ namespace Contents {
     getBackgroundTimeEverySeconds();
   }
 
-  function deleteTimer() {
+  function deleteTimer():void {
     //backへの通信→それが成功したら、windowの削除
-    let sendData = {
+    let sendData:sendData = {
       messageType: "deleteTimer",
     };
-    chrome.runtime.sendMessage(sendData, function (response) {
+    chrome.runtime.sendMessage(sendData,  (response) => {
       if (response) {
         contentStatus.is_Running = false;
         contentStatus.remaining_time = 0;
@@ -213,14 +210,14 @@ namespace Contents {
     });
   }
 
-  function deleteElement() {
+  function deleteElement():void {
     $("#hidden_id").remove();
     $("#delete_button_id").remove();
     $("#stop_button_id").remove();
     $("#restart_button_id").remove();
   }
 
-  function mmTime_To_Second(mmTime: any) {
+  function mmTime_To_Second(mmTime: any):string {
     let second = mmTime / 1000;
     let disp_min;
     let disp_sec;
