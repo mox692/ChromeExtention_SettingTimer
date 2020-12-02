@@ -1,25 +1,22 @@
+import { TimerStatus, responseFn, sendData } from "../types";
 
-import {TimerStatus, responseFn, sendData} from '../types'
-
-
-class TimerBackgroundStatus implements TimerStatus{
-  constructor(){
-    this.is_Running_Backend = false
-    this.is_Running_Content = false
-    this.kill_Signal = false
-    this.remaining_Time = 0
-    this.stopped_Time = 0
+class TimerBackgroundStatus implements TimerStatus {
+  constructor() {
+    this.is_Running_Backend = false;
+    this.is_Running_Content = false;
+    this.kill_Signal = false;
+    this.remaining_Time = 0;
+    this.stopped_Time = 0;
   }
-  is_Running_Content:boolean
-  is_Running_Backend:boolean
-  kill_Signal:boolean
-  remaining_Time:number
-  stopped_Time:number
+  is_Running_Content: boolean;
+  is_Running_Backend: boolean;
+  kill_Signal: boolean;
+  remaining_Time: number;
+  stopped_Time: number;
 }
 
-let timerStatus = new TimerBackgroundStatus()
+let timerStatus = new TimerBackgroundStatus();
 
-// from content
 chrome.runtime.onMessage.addListener(function (
   getData: sendData,
   sender: any,
@@ -35,7 +32,6 @@ chrome.runtime.onMessage.addListener(function (
         ContentRunning: timerStatus.is_Running_Content,
         Stopped_Time: timerStatus.stopped_Time,
       });
-      //  ここに現在の時間のレスポンスを加える
       break;
 
     case "chengeTimerStatus":
@@ -45,7 +41,7 @@ chrome.runtime.onMessage.addListener(function (
         timerStatus.kill_Signal = false;
         console.log(`chengeTimerStatusにて${timerStatus.is_Running_Backend}`);
         // ******** todo: handle if nil
-        if(getData.time != null){
+        if (getData.time != null) {
           setBackgroundTimer(getData.time);
         }
         sendResponse({ response: "NOW TIMER ON" });
@@ -57,8 +53,7 @@ chrome.runtime.onMessage.addListener(function (
 
     case "stopTimer":
       timerStatus.is_Running_Content = false;
-       // ******** todo: handle if nil
-      if(getData.Stopped_Time != null) {
+      if (getData.Stopped_Time != null) {
         timerStatus.stopped_Time = getData.Stopped_Time;
       }
       console.log(timerStatus.stopped_Time);

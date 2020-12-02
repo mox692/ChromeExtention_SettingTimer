@@ -1,6 +1,5 @@
 // click start button
 $("#timer_start").on("click", function () {
-
   // todo: more strictly
   let settingTime = $("#min").val() as string;
 
@@ -15,7 +14,9 @@ $("#timer_start").on("click", function () {
           settingTime: settingTime,
           onTimer: true,
         },
-        function () {console.log(settingTime)}
+        function () {
+          console.log(settingTime);
+        }
       );
     });
   } else {
