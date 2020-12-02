@@ -28,9 +28,7 @@ namespace Contents {
     remaining_time:number
   }
 
-  let is_Runnnig = false;
-  let Remaining_Time = 0;
-
+  let contentStatus = new TimerContentsStatus
 
   window.onload = function () {
     let sendData = {
@@ -38,9 +36,9 @@ namespace Contents {
     };
     chrome.runtime.sendMessage(sendData, function (response) {
       if (response) {
-        is_Runnnig = response.ContentRunning;
-        if (is_Runnnig) Remaining_Time = response.NowTime;
-        else Remaining_Time = response.Stopped_Time;
+        contentStatus.is_Running = response.ContentRunning;
+        if (contentStatus.is_Running) contentStatus.remaining_time = response.NowTime;
+        else contentStatus.remaining_time = response.Stopped_Time;
         if (response.TimerStatus) {
           createElement();
           getBackgroundTimeEverySeconds();
@@ -138,11 +136,11 @@ namespace Contents {
       if (response) {
         if (response.TimerStatus) {
           // DISPLAY TIMER...
-          is_Runnnig = response.ContentRunning;
+          contentStatus.is_Running = response.ContentRunning;
           target.textContent = `${response.NowTime}`;
-          Remaining_Time = response.NowTime;
-          if (is_Runnnig) {
-            if (Remaining_Time == 0) {
+          contentStatus.remaining_time = response.NowTime;
+          if (contentStatus.is_Running) {
+            if (contentStatus.remaining_time == 0) {
               target.textContent = "Time Over!!!";
             } else {
               target.textContent = mmTime_To_Second(response.NowTime);
@@ -174,10 +172,10 @@ namespace Contents {
   }
 
   function stopTimer() {
-    is_Runnnig = false;
+    contentStatus.is_Running = false;
     let sendData = {
       messageType: "stopTimer",
-      Stopped_Time: Remaining_Time,
+      Stopped_Time: contentStatus.remaining_time,
     };
     chrome.runtime.sendMessage(sendData, function (response) {
       if (response) {
@@ -189,9 +187,9 @@ namespace Contents {
   }
 
   function restartTimer() {
-    is_Runnnig = true;
+    contentStatus.is_Running = true;
 
-    changeTimerStatus(true, Remaining_Time);
+    changeTimerStatus(true, contentStatus.remaining_time);
     getBackgroundTimeEverySeconds();
   }
 
@@ -202,8 +200,8 @@ namespace Contents {
     };
     chrome.runtime.sendMessage(sendData, function (response) {
       if (response) {
-        is_Runnnig = false;
-        Remaining_Time = 0;
+        contentStatus.is_Running = false;
+        contentStatus.remaining_time = 0;
         deleteElement();
       } else {
         alert("Can Not stop timer");
