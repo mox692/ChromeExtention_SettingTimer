@@ -76,7 +76,7 @@ namespace Contents {
     } 
   });
 
-  function createElement():void {
+  const createElement = ():void => {
     let target:HTMLElementTagNameMap["body"] | null = document.querySelector("body");
     // ************ todo: null check to `target` ****************
     if (target === null) {
@@ -94,7 +94,7 @@ namespace Contents {
     stopButton.disabled = false;
     stopButton.className = "displayFix stop-button fnjdsanfsksadf";
     stopButton.textContent = "Stop";
-    stopButton.onclick = function () {
+    stopButton.onclick =  ():void => {
       restartButton.disabled = false;
       stopTimer();
     };
@@ -108,7 +108,7 @@ namespace Contents {
     restartButton.className = "displayFix restart-button fnjdsanfsksadf";
     restartButton.textContent = "Restart";
     restartButton.id = "restart_button_id";
-    restartButton.onclick = function () {
+    restartButton.onclick = ():void => {
       restartButton.disabled = true;
       restartTimer();
     };
@@ -120,13 +120,13 @@ namespace Contents {
     deleteButton.className = "displayFix delete-button fnjdsanfsksadf";
     deleteButton.textContent = "Delete";
     deleteButton.id = "delete_button_id";
-    deleteButton.onclick = function () {
+    deleteButton.onclick = ():void =>  {
       deleteTimer();
     };
     target.appendChild(deleteButton);
   }
 
-  function getBackgroundTimeEverySeconds():void {
+  const getBackgroundTimeEverySeconds = ():void => {
     let target: HTMLElement =
       document.getElementById("hidden_id") ?? document.createElement("body");
 
@@ -157,7 +157,7 @@ namespace Contents {
     });
   }
 
-  function changeTimerStatus(flag = false, time: number):void {
+  const changeTimerStatus = (flag = false, time: number):void => {
     let sendData:sendData = {
       messageType: "chengeTimerStatus",
       onTimer: flag,
@@ -172,7 +172,7 @@ namespace Contents {
     });
   }
 
-  function stopTimer():void {
+  const stopTimer = ():void =>  {
     contentStatus.is_Running = false;
     let sendData:sendData = {
       messageType: "stopTimer",
@@ -187,14 +187,14 @@ namespace Contents {
     });
   }
 
-  function restartTimer() {
+  const restartTimer = ():void => {
     contentStatus.is_Running = true;
 
     changeTimerStatus(true, contentStatus.remaining_time);
     getBackgroundTimeEverySeconds();
   }
 
-  function deleteTimer():void {
+  const deleteTimer = ():void =>  {
     //backへの通信→それが成功したら、windowの削除
     let sendData:sendData = {
       messageType: "deleteTimer",
@@ -210,17 +210,18 @@ namespace Contents {
     });
   }
 
-  function deleteElement():void {
+  const deleteElement = ():void => {
     $("#hidden_id").remove();
     $("#delete_button_id").remove();
     $("#stop_button_id").remove();
     $("#restart_button_id").remove();
   }
 
-  function mmTime_To_Second(mmTime: any):string {
-    let second = mmTime / 1000;
-    let disp_min;
-    let disp_sec;
+  const mmTime_To_Second = (mmTime: number):string => {
+    let second:number = mmTime / 1000;
+    let disp_min:number;
+    let disp_sec:number;
+
     if (60 <= second) {
       disp_min = Math.floor(second / 60);
       disp_sec = second % 60;
