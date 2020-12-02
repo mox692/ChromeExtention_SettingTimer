@@ -1,25 +1,8 @@
 
+import {TimerStatus, sendData} from '../types'
 namespace Contents {
 
-  type sendData = {
-    messageType :messageType
-    onTimer?:boolean
-    time?: number
-    Stopped_Time?:number
-  }
-
-  class ContentStatus {
-    constructor(isRunning:boolean, remainingTime:number){
-      this.isRunnning = isRunning
-      this.remainingTime = remainingTime
-    }
-    isRunnning:boolean
-    remainingTime:number
-  }
-
-  type messageType = 'checkTimerStatus' | 'chengeTimerStatus' | 'deleteTimer' | 'checkTimerStatus' | 'stopTimer'
-
-  class TimerContentsStatus {
+  class TimerContentsStatus implements TimerStatus{
     constructor(){
       this.is_Running = false,
       this.remaining_time = 0

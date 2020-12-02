@@ -1,13 +1,8 @@
 
-import {responseData, responseFn, messageType, sendData} from '../types'
+import {TimerStatus, responseFn, sendData} from '../types'
 
-let is_Running_Content = false;
-let is_Running_Backend = false;
-let Remaining_Time = 0;
-let Stopped_Time = 0;
-let Kill_Signal = false;
 
-class TimerBackgroundStatus {
+class TimerBackgroundStatus implements TimerStatus{
   constructor(){
     this.is_Running_Backend = false
     this.is_Running_Content = false
@@ -66,7 +61,7 @@ chrome.runtime.onMessage.addListener(function (
       if(getData.Stopped_Time != null) {
         timerStatus.stopped_Time = getData.Stopped_Time;
       }
-      console.log(Stopped_Time);
+      console.log(timerStatus.stopped_Time);
       timerStatus.kill_Signal = true;
       sendResponse({ Stopped_Time: timerStatus.stopped_Time });
       break;

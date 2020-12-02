@@ -1,6 +1,8 @@
 
 export type messageType = 'checkTimerStatus' | 'chengeTimerStatus' | 'deleteTimer' | 'checkTimerStatus' | 'stopTimer'
 
+export interface TimerStatus{}
+
 export type sendData = {
     messageType :messageType
     onTimer?:boolean
