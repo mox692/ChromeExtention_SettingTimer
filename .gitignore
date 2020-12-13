@@ -1,2 +1,6 @@
 .DS_Store
 node_modules
+
+extension/dist/popup/bundle.popup.js
+extension/dist/content/bundle.contents.js
+extension/dist/background/bundle.background.js

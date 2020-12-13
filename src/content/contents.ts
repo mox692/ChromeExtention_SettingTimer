@@ -1,18 +1,27 @@
-
-
+import { TimerStatus, sendData } from "../types";
 namespace Contents {
-  let is_Runnnig = false;
-  let Remaining_Time = 0;
+  class TimerContentsStatus implements TimerStatus {
+    constructor() {
+      (this.is_Running = false), (this.remaining_time = 0);
+    }
+    is_Running: boolean;
+    remaining_time: number;
+  }
 
-  window.onload = function () {
-    let sendData = {
+  let contentStatus = new TimerContentsStatus();
+
+  window.onload = () => {
+    let sendData: sendData = {
       messageType: "checkTimerStatus",
     };
-    chrome.runtime.sendMessage(sendData, function (response) {
+    chrome.runtime.sendMessage(sendData, (response) => {
       if (response) {
-        is_Runnnig = response.ContentRunning;
-        if (is_Runnnig) Remaining_Time = response.NowTime;
-        else Remaining_Time = response.Stopped_Time;
+        contentStatus.is_Running = response.ContentRunning;
+        if (contentStatus.is_Running) {
+          contentStatus.remaining_time = response.NowTime;
+        } else {
+          contentStatus.remaining_time = response.Stopped_Time;
+        }
         if (response.TimerStatus) {
           createElement();
           getBackgroundTimeEverySeconds();
@@ -33,88 +42,88 @@ namespace Contents {
       changeTimerStatus(true, Number(request.settingTime) * 60000);
       getBackgroundTimeEverySeconds();
 
-      let selection;
-      if (window.getSelection) {
-        // ************ todo: null check to `window.getSelection()` ****************
-        selection = window.getSelection();
-        if (selection === null) {
-          return;
-        }
-        selection = selection.toString();
+      let selection = window.getSelection();
+      if (selection != null) {
+        sendResponse(selection.toString);
       } else {
-        selection = "";
+        alert("element が作成できません");
+        return;
       }
-      sendResponse(selection);
-    } else if (request.onTimer == false) {
     }
   });
 
-  function createElement() {
-    let target = document.querySelector("body");
-    // ************ todo: null check to `target` ****************
+  const createElement = (): void => {
+    let target: HTMLElementTagNameMap["body"] | null = document.querySelector(
+      "body"
+    );
     if (target === null) {
       target = document.createElement("body");
     }
 
-    let element = document.createElement("div");
+    let element: HTMLElementTagNameMap["div"] = document.createElement("div");
     element.id = "hidden_id";
     element.className = "displayFix";
     target.appendChild(element);
 
-    // create stop button
-    let stopButton = document.createElement("button");
+    // ************ create stop button ************
+    let stopButton: HTMLElementTagNameMap["button"] = document.createElement(
+      "button"
+    );
     stopButton.type = "button";
     stopButton.disabled = false;
     stopButton.className = "displayFix stop-button fnjdsanfsksadf";
     stopButton.textContent = "Stop";
-    stopButton.onclick = function () {
+    stopButton.onclick = (): void => {
       restartButton.disabled = false;
       stopTimer();
     };
     stopButton.id = "stop_button_id";
     target.appendChild(stopButton);
 
-    // create restart button
-    let restartButton = document.createElement("button");
+    // ************ create restart button ************
+    let restartButton: HTMLElementTagNameMap["button"] = document.createElement(
+      "button"
+    );
     restartButton.type = "button";
     restartButton.disabled = true;
     restartButton.className = "displayFix restart-button fnjdsanfsksadf";
     restartButton.textContent = "Restart";
     restartButton.id = "restart_button_id";
-    restartButton.onclick = function () {
+    restartButton.onclick = (): void => {
       restartButton.disabled = true;
       restartTimer();
     };
     target.appendChild(restartButton);
 
-    // create delete button
-    let deleteButton = document.createElement("button");
+    // ************ create delete button ************
+    let deleteButton: HTMLElementTagNameMap["button"] = document.createElement(
+      "button"
+    );
     deleteButton.type = "button";
     deleteButton.className = "displayFix delete-button fnjdsanfsksadf";
     deleteButton.textContent = "Delete";
     deleteButton.id = "delete_button_id";
-    deleteButton.onclick = function () {
+    deleteButton.onclick = (): void => {
       deleteTimer();
     };
     target.appendChild(deleteButton);
-  }
+  };
 
-  function getBackgroundTimeEverySeconds() {
-    let target =
+  const getBackgroundTimeEverySeconds = (): void => {
+    let target: HTMLElement =
       document.getElementById("hidden_id") ?? document.createElement("body");
 
-    let sendData = {
+    let sendData: sendData = {
       messageType: "checkTimerStatus",
     };
-    chrome.runtime.sendMessage(sendData, function (response) {
+    chrome.runtime.sendMessage(sendData, (response) => {
       if (response) {
         if (response.TimerStatus) {
-          // DISPLAY TIMER...
-          is_Runnnig = response.ContentRunning;
+          contentStatus.is_Running = response.ContentRunning;
           target.textContent = `${response.NowTime}`;
-          Remaining_Time = response.NowTime;
-          if (is_Runnnig) {
-            if (Remaining_Time == 0) {
+          contentStatus.remaining_time = response.NowTime;
+          if (contentStatus.is_Running) {
+            if (contentStatus.remaining_time == 0) {
               target.textContent = "Time Over!!!";
             } else {
               target.textContent = mmTime_To_Second(response.NowTime);
@@ -128,10 +137,10 @@ namespace Contents {
         console.log("onTimerFlag => err...");
       }
     });
-  }
+  };
 
-  function changeTimerStatus(flag = false, time: any) {
-    let sendData = {
+  const changeTimerStatus = (flag = false, time: number): void => {
+    let sendData: sendData = {
       messageType: "chengeTimerStatus",
       onTimer: flag,
       time: time,
@@ -143,57 +152,56 @@ namespace Contents {
         console.log("onTimerFlag => err...");
       }
     });
-  }
+  };
 
-  function stopTimer() {
-    is_Runnnig = false;
-    let sendData = {
+  const stopTimer = (): void => {
+    contentStatus.is_Running = false;
+    let sendData: sendData = {
       messageType: "stopTimer",
-      Stopped_Time: Remaining_Time,
+      Stopped_Time: contentStatus.remaining_time,
     };
-    chrome.runtime.sendMessage(sendData, function (response) {
+    chrome.runtime.sendMessage(sendData, (response) => {
       if (response) {
         console.log(response);
       } else {
         console.log("onTimerFlag => err...");
       }
     });
-  }
+  };
 
-  function restartTimer() {
-    is_Runnnig = true;
-
-    changeTimerStatus(true, Remaining_Time);
+  const restartTimer = (): void => {
+    contentStatus.is_Running = true;
+    changeTimerStatus(true, contentStatus.remaining_time);
     getBackgroundTimeEverySeconds();
-  }
+  };
 
-  function deleteTimer() {
-    //backへの通信→それが成功したら、windowの削除
-    let sendData = {
+  const deleteTimer = (): void => {
+    let sendData: sendData = {
       messageType: "deleteTimer",
     };
-    chrome.runtime.sendMessage(sendData, function (response) {
+    chrome.runtime.sendMessage(sendData, (response) => {
       if (response) {
-        is_Runnnig = false;
-        Remaining_Time = 0;
+        contentStatus.is_Running = false;
+        contentStatus.remaining_time = 0;
         deleteElement();
       } else {
         alert("Can Not stop timer");
       }
     });
-  }
+  };
 
-  function deleteElement() {
+  const deleteElement = (): void => {
     $("#hidden_id").remove();
     $("#delete_button_id").remove();
     $("#stop_button_id").remove();
     $("#restart_button_id").remove();
-  }
+  };
 
-  function mmTime_To_Second(mmTime: any) {
-    let second = mmTime / 1000;
-    let disp_min;
-    let disp_sec;
+  const mmTime_To_Second = (mmTime: number): string => {
+    let second: number = mmTime / 1000;
+    let disp_min: number;
+    let disp_sec: number;
+
     if (60 <= second) {
       disp_min = Math.floor(second / 60);
       disp_sec = second % 60;
@@ -202,5 +210,5 @@ namespace Contents {
       disp_sec = second;
     }
     return `${disp_min}min ${disp_sec}sec`;
-  }
+  };
 }

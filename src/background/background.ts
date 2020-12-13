@@ -1,71 +1,84 @@
-// import './backgrounds'
+import { TimerStatus, responseFn, sendData } from "../types";
 
-let is_Running_Content = false;
-let is_Running_Backend = false;
-let Remaining_Time = 0;
-let Stopped_Time = 0;
-let Kill_Signal = false;
+class TimerBackgroundStatus implements TimerStatus {
+  constructor() {
+    this.is_Running_Backend = false;
+    this.is_Running_Content = false;
+    this.kill_Signal = false;
+    this.remaining_Time = 0;
+    this.stopped_Time = 0;
+  }
+  is_Running_Content: boolean;
+  is_Running_Backend: boolean;
+  kill_Signal: boolean;
+  remaining_Time: number;
+  stopped_Time: number;
+}
 
-// from content
+let timerStatus = new TimerBackgroundStatus();
+
 chrome.runtime.onMessage.addListener(function (
-  getData: any,
+  getData: sendData,
   sender: any,
-  sendResponse: any
+  sendResponse: responseFn
 ) {
   console.log(getData);
   switch (getData.messageType) {
     case "checkTimerStatus":
-      console.log(`checkTimerStatusにて${is_Running_Backend}`);
+      console.log(`checkTimerStatusにて${timerStatus.is_Running_Backend}`);
       sendResponse({
-        TimerStatus: is_Running_Backend,
-        NowTime: Remaining_Time,
-        ContentRunning: is_Running_Content,
-        Stopped_Time: Stopped_Time,
+        TimerStatus: timerStatus.is_Running_Backend,
+        NowTime: timerStatus.remaining_Time,
+        ContentRunning: timerStatus.is_Running_Content,
+        Stopped_Time: timerStatus.stopped_Time,
       });
-      //  ここに現在の時間のレスポンスを加える
       break;
 
     case "chengeTimerStatus":
       if (getData.onTimer) {
-        is_Running_Backend = true;
-        is_Running_Content = true;
-        Kill_Signal = false;
-        console.log(`chengeTimerStatusにて${is_Running_Backend}`);
-        setBackgroundTimer(getData.time);
+        timerStatus.is_Running_Backend = true;
+        timerStatus.is_Running_Content = true;
+        timerStatus.kill_Signal = false;
+        console.log(`chengeTimerStatusにて${timerStatus.is_Running_Backend}`);
+        // ******** todo: handle if nil
+        if (getData.time != null) {
+          setBackgroundTimer(getData.time);
+        }
         sendResponse({ response: "NOW TIMER ON" });
       } else {
-        is_Running_Backend = false;
+        timerStatus.is_Running_Backend = false;
         sendResponse({ response: "NOW TIMER OFF" });
       }
       break;
 
     case "stopTimer":
-      is_Running_Content = false;
-      Stopped_Time = getData.Stopped_Time;
-      console.log(Stopped_Time);
-      Kill_Signal = true;
-      sendResponse({ Stopped_Time: Stopped_Time });
+      timerStatus.is_Running_Content = false;
+      if (getData.Stopped_Time != null) {
+        timerStatus.stopped_Time = getData.Stopped_Time;
+      }
+      console.log(timerStatus.stopped_Time);
+      timerStatus.kill_Signal = true;
+      sendResponse({ Stopped_Time: timerStatus.stopped_Time });
       break;
 
     case "deleteTimer":
-      is_Running_Backend = false;
-      is_Running_Content = false;
-      Kill_Signal = true;
+      timerStatus.is_Running_Backend = false;
+      timerStatus.is_Running_Content = false;
+      timerStatus.kill_Signal = true;
       sendResponse({ delete_message: "delete success" });
       break;
   }
 });
 
-// in => time(mm sec) , out => change remainTime
 function setBackgroundTimer(time: number) {
   function showtime() {
     let timeoutId = setTimeout(showtime, 1000);
     time = time - 1000;
     console.log(time);
-    Remaining_Time = time;
-    if (time == -1000 || Kill_Signal == true) {
+    timerStatus.remaining_Time = time;
+    if (time == -1000 || timerStatus.kill_Signal == true) {
       clearTimeout(timeoutId);
-      is_Running_Backend = false;
+      timerStatus.is_Running_Backend = false;
     }
   }
   showtime();
